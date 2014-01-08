@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 
@@ -24,9 +26,6 @@ import org.kie.api.task.model.OrganizationalEntity;
 import org.kie.api.task.model.Status;
 import org.kie.api.task.model.Task;
 import org.kie.api.task.model.TaskSummary;
-import org.kie.internal.task.api.TaskAttachmentService;
-import org.kie.internal.task.api.TaskContentService;
-import org.kie.internal.task.api.TaskQueryService;
 
 
 /***
@@ -40,14 +39,15 @@ import org.kie.internal.task.api.TaskQueryService;
 @JBPMContextEJBBinding
 @Interceptors({JBPMContextEJBInterceptor.class})
 @Stateless
+@Alternative
 public class TaskServiceBean implements TaskService, TaskServiceLocal, TaskServiceRemote {
 
 	@EJB
 	private KnowledgeManagerBean knowledgeManager;
 
 	@Inject
-	private TaskService taskService;	
-	
+	private org.kie.api.task.TaskService taskService;
+
 	@Override
 	public void activate(long taskId, String userId) {
 		knowledgeManager.getRuntimeEngineByTaskId(taskId).getTaskService().activate(taskId, userId);
