@@ -3,10 +3,10 @@
   <kbase name="defaultKieBase" default="true" eventProcessingMode="cloud" equalsBehavior="identity" declarativeAgenda="disabled" scope="javax.enterprise.context.ApplicationScoped" packages="*">
     <ksession name="defaultKieSession" type="stateful" default="true" clockType="realtime" scope="javax.enterprise.context.ApplicationScoped">
     	<workItemHandlers>
-    		<workItemHandler name="Custom Handler" type="new org.jbpm.ee.test.TestHandler()"/>
+    		<workItemHandler name="Custom Handler" type="org.jbpm.ee.test.TestHandler"/>
     	</workItemHandlers>
     	<listeners>
-    		<processEventListener type = "new org.jbpm.ee.test.TestListener()"/>
+    		<processEventListener type = "org.jbpm.ee.test.TestListener"/>
     	</listeners>
     </ksession>
     <ksession name="defaultStatelessKieSession" type="stateless" default="true" clockType="realtime" scope="javax.enterprise.context.ApplicationScoped"/>
