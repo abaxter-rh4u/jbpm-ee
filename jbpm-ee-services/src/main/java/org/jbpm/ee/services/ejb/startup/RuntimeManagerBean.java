@@ -22,10 +22,12 @@ import org.jbpm.ee.runtime.KieContainerEE;
 import org.jbpm.ee.runtime.RegisterableItemsFactoryEE;
 import org.jbpm.ee.services.model.KieReleaseId;
 import org.jbpm.runtime.manager.impl.AbstractRuntimeManager;
+import org.jbpm.runtime.manager.impl.KModuleRegisterableItemsFactory;
 import org.jbpm.runtime.manager.impl.RuntimeEnvironmentBuilder;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieScanner;
+import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.manager.RuntimeEnvironment;
 import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.api.runtime.manager.RuntimeManagerFactory;
@@ -41,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public class RuntimeManagerBean {
 	private static final Logger LOG = LoggerFactory.getLogger(RuntimeManagerBean.class);
 	
-	protected Map<KieReleaseId, KieContainerEE> containerCache;
+	protected Map<KieReleaseId, KieContainer> containerCache;
 	protected Map<KieReleaseId, KieScanner> scannerCache;
 	protected Map<KieReleaseId, RuntimeManager> runtimeManagerCache;
 	
@@ -69,7 +71,7 @@ public class RuntimeManagerBean {
 	private void setup() {
 		kieServices = KieServices.Factory.get();
 		
-		containerCache = new ConcurrentHashMap<KieReleaseId, KieContainerEE>();
+		containerCache = new ConcurrentHashMap<KieReleaseId, KieContainer>();
 		scannerCache = new ConcurrentHashMap<KieReleaseId, KieScanner>();
 		runtimeManagerCache = new ConcurrentHashMap<KieReleaseId, RuntimeManager>();
 
@@ -114,7 +116,7 @@ public class RuntimeManagerBean {
 	 * @return The in-memory loaded kjar
 	 */
 	@Lock(LockType.READ)
-	public KieContainerEE getKieContainer(KieReleaseId resourceKey) {
+	public KieContainer getKieContainer(KieReleaseId resourceKey) {
 		
 		if (!isReleaseIdValid(resourceKey)) {
 			throw new IllegalArgumentException("ReleaseId invalid: " + resourceKey);
@@ -124,7 +126,7 @@ public class RuntimeManagerBean {
 			//create a new container.
 			
 			ReleaseIdImpl releaseID = new ReleaseIdImpl(resourceKey.getGroupId(), resourceKey.getArtifactId(), resourceKey.getVersion());
-			KieContainerEE kieContainer = new KieContainerEE(kieServices.newKieContainer(releaseID));
+			KieContainer kieContainer = kieServices.newKieContainer(releaseID);
 			KieScanner kieScanner = kieServices.newKieScanner(kieContainer);
 			kieScanner.start(scannerPollFrequency);
 			
@@ -191,7 +193,7 @@ public class RuntimeManagerBean {
 	 */
 	@Lock(LockType.READ)
 	protected RuntimeEnvironment createEnvironment(KieReleaseId releaseId) {
-		KieContainerEE container = getKieContainer(releaseId);
+		KieContainer container = getKieContainer(releaseId);
 		
 		RuntimeEnvironment re = RuntimeEnvironmentBuilder.Factory.get().newDefaultBuilder()
 				.entityManagerFactory(emf)
@@ -199,7 +201,7 @@ public class RuntimeManagerBean {
 				.knowledgeBase(getKieBase(releaseId))
 				.persistence(true)
 				.classLoader(getClasssloader(releaseId))
-				.registerableItemsFactory(new RegisterableItemsFactoryEE(container))
+				.registerableItemsFactory(new KModuleRegisterableItemsFactory(container, null))
 				.get();
 		return re;
 	}
