@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class TestListener implements ProcessEventListener {
 
-	private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(ProcessEventListener.class);
+	private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(TestListener.class);
 	
 	public void beforeProcessStarted(ProcessStartedEvent event) {
 		// TODO Auto-generated method stub
