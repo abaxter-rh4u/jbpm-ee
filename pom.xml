@@ -311,6 +311,51 @@
 				<updatePolicy>daily</updatePolicy>
 			</snapshots>
 		</repository>
+		
+     <repository>
+       <id>codehaus-snapshots</id>
+       <name>JBoss Public Maven Repository Codehaus</name>
+<url>https://repository.jboss.org/nexus/content/repositories/codehaus-snapshots/</url>
+       <layout>default</layout>
+       <releases>
+         <enabled>true</enabled>
+         <updatePolicy>never</updatePolicy>
+       </releases>
+       <snapshots>
+         <enabled>true</enabled>
+         <updatePolicy>never</updatePolicy>
+       </snapshots>
+     </repository>
+     <!-- till BPMS 6 ER4 ~ 6.0.0-redhat-4 -->
+     <repository>
+       <id>soa-brms-6-build</id>
+       <name>BRMS/BPMS 6.0 Private MEAD Repository soa-brms-6-build</name>
+<url>http://download.devel.redhat.com/brewroot/repos/soa-brms-6-build/latest/maven/</url>
+       <layout>default</layout>
+       <releases>
+         <enabled>true</enabled>
+         <updatePolicy>never</updatePolicy>
+       </releases>
+       <snapshots>
+         <enabled>false</enabled>
+         <updatePolicy>never</updatePolicy>
+       </snapshots>
+     </repository>
+     <!-- since BPMS ER5 ~ 6.0.0-redhat-6 (EAP 6.1.1 based) -->
+     <repository>
+       <id>jb-ip-6-build</id>
+       <name>BRMS/BPMS 6.0 Private MEAD Repository jb-ip-6-build</name>
+<url>http://download.devel.redhat.com/brewroot/repos/jb-ip-6-build/latest/maven/</url>
+       <layout>default</layout>
+       <releases>
+         <enabled>true</enabled>
+         <updatePolicy>never</updatePolicy>
+       </releases>
+       <snapshots>
+         <enabled>false</enabled>
+         <updatePolicy>never</updatePolicy>
+       </snapshots>
+     </repository>
 	</repositories>
 
 	<packaging>pom</packaging>
