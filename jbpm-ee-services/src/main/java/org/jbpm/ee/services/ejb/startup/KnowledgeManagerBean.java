@@ -1,8 +1,10 @@
 package org.jbpm.ee.services.ejb.startup;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.DependsOn;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,9 +15,13 @@ import org.hibernate.SessionException;
 import org.jbpm.ee.exception.InactiveProcessInstance;
 import org.jbpm.ee.persistence.KieBaseXProcessInstance;
 import org.jbpm.ee.services.model.KieReleaseId;
+import org.jbpm.services.task.HumanTaskConfigurator;
+import org.jbpm.services.task.HumanTaskServiceFactory;
+import org.jbpm.services.task.lifecycle.listeners.BAMTaskEventListener;
 import org.kie.api.runtime.manager.RuntimeEngine;
 import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.api.task.TaskService;
+import org.kie.api.task.UserGroupCallback;
 import org.kie.api.task.model.Task;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 import org.slf4j.Logger;
@@ -43,14 +49,30 @@ public class KnowledgeManagerBean {
 	protected EntityManager em;
 	
 	@Inject
-	protected TaskService taskService;
-	
-	@Inject
 	protected RuntimeManagerBean runtimeManager;
 
+	@Inject
+	UserGroupCallback userGroupCallback;
+
+	protected TaskService taskService;
+
+	protected BAMTaskEventListener bamTaskEventListener;
+
+	
+	@PostConstruct
+	private void setup() {
+		HumanTaskConfigurator configurator = HumanTaskServiceFactory.newTaskServiceConfigurator()
+				.entityManagerFactory(emf)
+				.userGroupCallback(userGroupCallback);
+		taskService = configurator.getTaskService();
+		bamTaskEventListener  = new BAMTaskEventListener();
+	}
+
+	@Produces
 	public TaskService getKieSessionUnboundTaskService() {
 		return taskService;
 	}
+
 	
 	@Inject
 	protected EntityManagerFactory emf;
