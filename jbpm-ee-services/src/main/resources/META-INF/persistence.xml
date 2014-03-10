@@ -30,6 +30,7 @@
 		<class>org.jbpm.process.audit.ProcessInstanceLog</class>
 		<class>org.jbpm.process.audit.NodeInstanceLog</class>
 		<class>org.jbpm.process.audit.VariableInstanceLog</class>
+		<class>org.jbpm.services.task.audit.TaskEventImpl</class>
 
 		<!-- manager -->
 		<class>org.jbpm.runtime.manager.impl.jpa.ContextMappingInfo</class>
