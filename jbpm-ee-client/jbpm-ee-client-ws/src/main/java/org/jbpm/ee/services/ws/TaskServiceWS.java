@@ -15,7 +15,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.jbpm.ee.services.TaskService;
 import org.jbpm.ee.services.model.KieReleaseId;
@@ -24,7 +23,6 @@ import org.jbpm.ee.services.model.task.Task;
 import org.jbpm.ee.services.model.task.TaskAttachment;
 import org.jbpm.ee.services.model.task.TaskSummary;
 import org.jbpm.ee.services.ws.request.JaxbMapRequest;
-import org.jbpm.services.task.impl.model.xml.adapter.OrganizationalEntityXmlAdapter;
 import org.kie.api.task.model.OrganizationalEntity;
 import org.kie.api.task.model.Status;
 
@@ -163,7 +161,7 @@ public interface TaskServiceWS {
 	void nominate(
 	    @WebParam(name="taskId") @PathParam("taskId") long taskId, 
 	    @WebParam(name="userId") @QueryParam("userId") String userId, 
-	    @WebParam(name="potentialOwners") @XmlJavaTypeAdapter(OrganizationalEntityXmlAdapter.class)List<OrganizationalEntity> potentialOwners
+	    @WebParam(name="potentialOwners") List<OrganizationalEntity> potentialOwners
 	);
 	
 	@WebMethod
