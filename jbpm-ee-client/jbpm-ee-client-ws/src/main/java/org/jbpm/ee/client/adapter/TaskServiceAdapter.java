@@ -8,6 +8,7 @@ import org.jbpm.ee.services.TaskService;
 import org.jbpm.ee.services.model.KieReleaseId;
 import org.jbpm.ee.services.ws.TaskServiceWS;
 import org.jbpm.ee.services.ws.request.JaxbMapRequest;
+import org.jbpm.services.task.impl.model.xml.JaxbOrganizationalEntity;
 import org.kie.api.task.model.Attachment;
 import org.kie.api.task.model.Content;
 import org.kie.api.task.model.OrganizationalEntity;
@@ -103,7 +104,8 @@ public class TaskServiceAdapter implements TaskService {
 
 	@Override
 	public void nominate(long taskId, String userId, List<OrganizationalEntity> potentialOwners) {
-		this.taskService.nominate(taskId, userId, potentialOwners);
+		List<JaxbOrganizationalEntity> jaxbList = JaxbOrganizationalEntity.convertListFromInterfaceToJaxbImpl(potentialOwners);
+		this.taskService.nominate(taskId, userId, jaxbList);
 	}
 
 	@Override

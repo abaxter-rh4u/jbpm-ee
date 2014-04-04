@@ -23,7 +23,7 @@ import org.jbpm.ee.services.model.task.Task;
 import org.jbpm.ee.services.model.task.TaskAttachment;
 import org.jbpm.ee.services.model.task.TaskSummary;
 import org.jbpm.ee.services.ws.request.JaxbMapRequest;
-import org.kie.api.task.model.OrganizationalEntity;
+import org.jbpm.services.task.impl.model.xml.JaxbOrganizationalEntity;
 import org.kie.api.task.model.Status;
 
 /**
@@ -161,7 +161,7 @@ public interface TaskServiceWS {
 	void nominate(
 	    @WebParam(name="taskId") @PathParam("taskId") long taskId, 
 	    @WebParam(name="userId") @QueryParam("userId") String userId, 
-	    @WebParam(name="potentialOwners") List<OrganizationalEntity> potentialOwners
+	    @WebParam(name="potentialOwners") List<JaxbOrganizationalEntity> potentialOwners
 	);
 	
 	@WebMethod

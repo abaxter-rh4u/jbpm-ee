@@ -6,7 +6,6 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.jbpm.ee.services.ejb.local.TaskServiceLocal;
 import org.jbpm.ee.services.model.KieReleaseId;
@@ -18,7 +17,7 @@ import org.jbpm.ee.services.model.task.TaskAttachment;
 import org.jbpm.ee.services.model.task.TaskSummary;
 import org.jbpm.ee.services.ws.exceptions.RemoteServiceException;
 import org.jbpm.ee.services.ws.request.JaxbMapRequest;
-import org.jbpm.services.task.impl.model.xml.adapter.OrganizationalEntityXmlAdapter;
+import org.jbpm.services.task.impl.model.xml.JaxbOrganizationalEntity;
 import org.kie.api.task.model.OrganizationalEntity;
 import org.kie.api.task.model.Status;
 
@@ -176,9 +175,10 @@ public class TaskServiceWSImpl implements TaskServiceWS {
 	}
 
 	@Override
-	public void nominate(long taskId, String userId, @XmlJavaTypeAdapter(OrganizationalEntityXmlAdapter.class) List<OrganizationalEntity> potentialOwners) {
+	public void nominate(long taskId, String userId, List<JaxbOrganizationalEntity> potentialOwners) {
 		try {
-			taskService.nominate(taskId, userId, potentialOwners);
+			List<OrganizationalEntity> orgEntityList = JaxbOrganizationalEntity.convertListFromJaxbImplToInterface(potentialOwners);
+			taskService.nominate(taskId, userId, orgEntityList);
 		}
 		catch(Exception e) {
 			throw new RemoteServiceException(e);
